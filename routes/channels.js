@@ -3,9 +3,9 @@ const router = new express.Router();
 const Channel = require('../models/channel')
 
 //Teste
-router.get('/', function (req, res, next) {
+/*router.get('/', function (req, res, next) {
     res.json({ message: 'Olá mundo!' });
-});
+});*/
 
 router.get('/channels', function (req, res, next) {
         Channel.find(function (err, channels) {
@@ -16,8 +16,10 @@ router.get('/channels', function (req, res, next) {
     });
 
 router.post('/channels', function (req, res, next) {
-    let channel = new Channel();
-    channel.name = req.body.name;
+    let channel = new Channel({
+        name: req.body.name,
+        userId: req.body.userId
+    });
     channel.save(function (err) {
         if (err) res.send(err);
         res.json({ message: 'Channel created!' });
@@ -51,6 +53,6 @@ router.get('/channels/:id/delete', function (req, res, next) {
         if (err) res.send(err);
         res.send(mongoRes);
     });
-})
+});
 
 module.exports = router;
