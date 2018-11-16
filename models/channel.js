@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const channelSchema = new Schema({
     name: String,
-    userId: String,
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
+
     dataPoints: [
         {
             date: {
@@ -12,10 +16,13 @@ const channelSchema = new Schema({
             entries: [
                 {
                     name: String,
-                    value: String
+                    value: Schema.Types.Mixed
                 }
             ]
         }
     ]
 });
+
+
+
 module.exports = mongoose.model('Channel', channelSchema);

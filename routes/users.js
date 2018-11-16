@@ -29,7 +29,7 @@ router.post('/', function (req, res, next) {
 });
 
 router.get('/:id', function (req, res, next) {
-  User.find({ _id: req.params.id }, function (err, users) {
+  User.findById(req.params.id, function (err, users) {
     if (err) {
       res.send(err);
     }
@@ -39,20 +39,22 @@ router.get('/:id', function (req, res, next) {
 });
 
 router.post('/:id/update', function (req, res, next) {
-  const doc = {
-    name: req.body.name,
-    password: req.body.password
-  };
-  User.updateOne({ _id: req.params.id }, doc, function (err, raw) {
+  const doc = {};
+  if (req.body.name) doc.name = req.body.name;
+  if (req.body.password) doc.password = req.body.password;
+  if (req.body.email) doc.email = req.body.email;
+  User.findByIdAndUpdate(req.params.id, doc, function (err, raw) {
     if (err) res.send(err);
     res.send({ message: raw });
+    res.end();
   });
 });
 
 router.get('/:id/delete', function (req, res, next) {
-  User.deleteOne({ _id: req.params.id }, function (err, mongoRes) {
+  User.findByIdAndDelete(req.params.id, function (err, raw) {
     if (err) res.send(err);
-    res.send(mongoRes);
+    res.send(raw);
+    res.end();
   });
 });
 
